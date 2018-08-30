@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <title>Chatroom example</title>
+        <script type="text/javascript" src="redux-server/server-store.js"></script>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 5px;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+            #messagepanel {
+                height: 80%;
+                overflow-y: scroll;
+                margin-bottom: 10px;
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+            #messagediv {
+                display: inline-block;
+                width: 80%;
+            }
+            #senddiv {
+                width: 17%;
+                float: right;
+            }
+            #messagefield, #sendbutton {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="messagepanel">
+        </div>
+        <form onsubmit="return false;">
+            <div id="messagediv">
+                <input id="messagefield" placeholder="Please enter a message" />
+            </div>
+            <div id="senddiv" >
+                <button id="sendbutton">send</button>
+            </div>
+        </form>
+        <script>
+            (function(serverStore) {
+                var user = null;
+                var messagefield = document.querySelector('#messagefield');
+                var messagepanel = document.querySelector('#messagepanel');
+                var sendbutton = document.querySelector('#sendbutton');
+
+                sendbutton.onclick = function() {
+                    var message = messagefield.value;
+                    if(!message)
+                        return;
+                    serverStore.dispatch({
+                        type: 'message',
+                        user,
+                        message,
+                    });
+                    messagefield.value = '';
+                };
+
+                serverStore.subscribe(function() {
+                    messagepanel.innerHTML = '';
+                    serverStore.getState().messages.forEach(function(entry) {
+                        messagepanel.innerHTML += `<p><strong>${entry.user}</strong> ${entry.message}`;
+                    });
+                    messagepanel.scrollTop = messagepanel.scrollHeight;
+                });
+
+                while(!user || !user.trim())
+                    user = prompt("Please enter your name");
+                document.title += ` - ${user}`;
+                messagefield.placeholder = `${user}: ${messagefield.placeholder}`;
+                messagefield.focus();
+
+
+            })(window.serverStore);
+        </script>
+    </body>
+</html>
