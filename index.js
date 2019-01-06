@@ -6,17 +6,17 @@ var firsthandler = require('firsthandler');
 
 var CLIENT_PATH = '/redux-server/server-store.js';
 
-var REDUX_DIST = 'redux/dist/redux.js';
-var SOCKET_DIST = 'socket.io/node_modules/socket.io-client/socket.io.js';
+var REDUX_DIST = 'redux/dist/redux.min.js';
+var SOCKET_DIST = 'socket.io-client/dist/socket.io.slim.js';
 
 var serveClient = function(req, res, next) {
     if(req.url != CLIENT_PATH)
         return next();
 
     try {
-        var script = fs.readFileSync(require.resolve(SOCKET_DIST));
-        script += '\n\n' + fs.readFileSync(require.resolve(REDUX_DIST));
-        script += '\n\n' + fs.readFileSync(require.resolve('./client.js'));
+        var script = fs.readFileSync(require.resolve(SOCKET_DIST), 'utf8').split('//#')[0];
+        script += '\n\n' + fs.readFileSync(require.resolve(REDUX_DIST), 'utf8');
+        script += '\n\n' + fs.readFileSync(require.resolve('./client.js'), 'utf8');
         res.writeHead(200, {"Content-Type": "application/javascript"});
         res.end(script);
     } catch(e) {
@@ -49,6 +49,7 @@ var attachStore = function(ioServer, store, specifier) {
         });
         socket.on('disconnect', function() {
             unsubscribe();
+            // send action on disconnect
         });
     });
 };

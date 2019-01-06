@@ -1,6 +1,6 @@
 {
   "name": "redux-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Server side Redux store, shared with multiple clients",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
   "dependencies": {
     "firsthandler": "0.0.1",
     "redux": "^3.6.0",
-    "socket.io": "^1.4.8"
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^2.2.0"
   }
 }
