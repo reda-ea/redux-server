@@ -3,8 +3,10 @@
 
     var socket = io();
 
+    // TODO allow custom local reducer
     var store = Redux.createStore(function(s){return s;});
 
+    // TODO use a middleware instead
     store.replaceReducer(function(state, action) {
         if(action.type == '__internal__sync_store__') {
             store.__synchronized = true;

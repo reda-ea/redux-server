@@ -1,6 +1,6 @@
 {
   "name": "redux-server",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Server side Redux store, shared with multiple clients",
   "main": "index.js",
   "scripts": {
