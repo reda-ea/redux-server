@@ -49,7 +49,10 @@ var attachStore = function(ioServer, store, specifier) {
         });
         socket.on('disconnect', function() {
             unsubscribe();
-            // send action on disconnect
+            store.dispatch({
+                type: '@@reduxClient/EXIT',
+                __clientId: socket.id,
+            });
         });
     });
 };
