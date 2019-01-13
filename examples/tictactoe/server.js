@@ -11,6 +11,8 @@ var $lobby = require('./lobby');
 var $game = require('./game');
 
 var store = redux.createStore(function(state, action) {
+    if(action.__clientId)
+        console.log(`${action.__clientId} => ${action.type}`);
     if(action.type == 'join')
         return $lobby.join(state, action.__clientId, action.name);
     if(action.type == 'invite')

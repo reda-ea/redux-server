@@ -43,10 +43,14 @@ var invite = function(state, from, to) {
     state.invites.push({from, to});
 };
 
-var reject = function(state, id) {
-    var removed = _.remove(state.invites, function(invite) {
+var _remove_invites = function(state, id) {
+    return _.remove(state.invites, function(invite) {
         return invite.from == id || invite.to == id;
     });
+};
+
+var reject = function(state, id) {
+    var removed = _remove_invites(state, id);
     _.forEach(removed, function(invite) {
         var destid = invite.from == id ? invite.to : invite.from;
         _msg(state, destid, 'Invitation canceled');
@@ -64,7 +68,7 @@ var accept = function(state, id, game) {
         players: [invite.from, invite.to],
         game,
     });
-    reject(state, id);
+    _remove_invites(state, id);
 };
 
 // apply action to the proper game state object
